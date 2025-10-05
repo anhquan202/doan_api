@@ -1,0 +1,2 @@
+class RoomSupply < ApplicationRecord
+end

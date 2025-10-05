@@ -1,0 +1,2 @@
+class ContractUtility < ApplicationRecord
+end

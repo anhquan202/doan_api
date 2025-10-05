@@ -45,3 +45,9 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
+
+gem "devise"
+
+gem "devise-jwt"
+
+gem "will_paginate", "~> 4.0"
