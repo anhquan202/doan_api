@@ -51,3 +51,5 @@ gem "devise"
 gem "devise-jwt"
 
 gem "will_paginate", "~> 4.0"
+
+gem "grape"
