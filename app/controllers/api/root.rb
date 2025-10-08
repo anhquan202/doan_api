@@ -22,8 +22,7 @@ class Api::Root < Grape::API
 
     error!({
       success: false,
-      message: "System error",
-      details: e.message
+      message: e.message
     }, 500)
   end
 

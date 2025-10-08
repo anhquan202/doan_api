@@ -19,6 +19,16 @@ module Api
           result = ::Admin::SignupService.new(params).call
           ok_response(data: { token: result })
         end
+
+        desc "Admin sign in"
+        params do
+          requires :email, type: String, allow_blank: false
+          requires :password, type: String, allow_blank: false
+        end
+        post "sign_in" do
+          result = ::Admin::SigninService.new(params).call
+          ok_response(data: { token: result })
+        end
       end
     end
   end
