@@ -6,6 +6,7 @@ module Api
       format :json
 
       mount Api::Admin::Auth
+      mount Api::Admin::Room
     end
   end
 end

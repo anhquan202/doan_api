@@ -30,9 +30,9 @@ class Api::Root < Grape::API
     def current_admin
       token = headers["Authorization"]&.split(" ")&.last
       return nil unless token
+      admin = Warden::JWTAuth::UserDecoder.new.call(token, :admin, nil)
 
-      payload = Warden::JWTAuth::TokenDecoder.new.call(token)
-      Admin.find(payload["sub"])
+      admin
     rescue => e
       Rails.logger.error "current_user error: #{e.class} - #{e.message}"
       nil
