@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_08_171651) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_09_165418) do
   create_table "admins", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -95,7 +95,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_08_171651) do
   create_table "room_utilities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "room_id"
     t.bigint "utility_id"
-    t.integer "is_required"
+    t.boolean "is_required"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_id"], name: "index_room_utilities_on_room_id"
@@ -140,9 +140,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_08_171651) do
   add_foreign_key "contract_customers", "contracts"
   add_foreign_key "contract_customers", "customers"
   add_foreign_key "contracts", "rooms"
-  add_foreign_key "room_supplies", "rooms"
+  add_foreign_key "room_supplies", "rooms", on_delete: :cascade
   add_foreign_key "room_supplies", "supplies"
-  add_foreign_key "room_utilities", "rooms"
+  add_foreign_key "room_utilities", "rooms", on_delete: :cascade
   add_foreign_key "room_utilities", "utilities"
   add_foreign_key "vehicles", "customers"
 end
