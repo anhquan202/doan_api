@@ -3,6 +3,13 @@ class Api::Root < Grape::API
   version "v1", using: :path
   format :json
 
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    error!({
+      success: false,
+      message: "Record not found"
+    }, 404)
+  end
+
   rescue_from ActiveRecord::RecordInvalid do |e|
     error!({ success: false, message: "Validation failed", errors: e.record.errors.to_hash(true) }, 422)
   end
@@ -46,17 +53,15 @@ class Api::Root < Grape::API
       { success: true, message: message, data: data }
     end
 
-    def paginate(collection, per_page: 10)
-      pagination = {
+    def paginate_meta(collection, per_page = 10)
+      {
         current_page: collection.current_page,
-        next_page: collection.next_page,
-        prev_page: collection.prev_page,
-        total_pages: collection.total_pages,
-        total_count: collection.total_count,
-        per_page: per_page
+        from: collection.offset + 1,
+        to: collection.offset + per_page,
+        per_page: per_page,
+        total: collection.total_entries,
+        total_pages: collection.total_pages
       }
-
-      pagination
     end
   end
 

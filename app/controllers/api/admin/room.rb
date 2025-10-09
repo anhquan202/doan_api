@@ -35,5 +35,41 @@ class Api::Admin::Room < Grape::API
         error_response(message: "Validation failed", errors: room.errors.full_messages)
       end
     end
+
+    desc "List Rooms"
+    params do
+      optional :page, type: Integer, default: 1, desc: "Page number"
+      optional :per_page, type: Integer, default: 10, desc: "Items per page"
+    end
+    get do
+      page = params[:page] || 1
+      per_page = params[:per_page] || 10
+
+      rooms = Room.includes(:supplies, :utilities).paginate(page: page, per_page: per_page)
+
+      data = {
+        rooms: ActiveModel::SerializableResource.new(
+          rooms,
+          each_serializer: ::RoomSerializer
+        ),
+        meta: paginate_meta(rooms)
+      }
+
+      ok_response data: data
+    end
+
+    desc "Get Room by ID"
+    params do
+      requires :id, type: Integer, desc: "Room ID"
+    end
+    get ":id" do
+      room = Room.includes(:supplies, :utilities).find(params[:id])
+
+      data = {
+        room: ::RoomSerializer.new(room)
+      }
+
+      ok_response data: data
+    end
   end
 end
