@@ -17,7 +17,25 @@ class Api::Admin::Room < Grape::API
         requires :is_required, type: Boolean
       end
     end
+
+    params :update_room do
+      optional :room_type, type: String, values: Room.room_types.keys
+      optional :price, type: BigDecimal, desc: "Room price"
+      optional :status, type: String, values: Room.statuses.keys
+      optional :description, type: String, desc: "Room description"
+
+      optional :room_supplies_attributes, type: Array do
+        optional :supply_id, type: Integer, desc: "ID of supply"
+        optional :quantity, type: Integer, default: 1
+      end
+
+      optional :room_utilities_attributes, type: Array do
+        optional :utility_id, type: Integer
+        optional :is_required, type: Boolean
+      end
+    end
   end
+
   resources :rooms do
     desc "Create Room"
     params do
@@ -70,6 +88,19 @@ class Api::Admin::Room < Grape::API
       }
 
       ok_response data: data
+    end
+
+    desc "Update Room by ID"
+    params do
+      requires :id, type: Integer, desc: "Room ID"
+      use :update_room
+    end
+    patch ":id" do
+      payload = declared(params, include_missing: false)
+
+      Admin::UpdateRoomService.new(payload).call
+
+      success_response
     end
   end
 end
