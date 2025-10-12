@@ -102,5 +102,17 @@ class Api::Admin::Room < Grape::API
 
       success_response
     end
+
+    desc "Delete Room by ID"
+    params do
+      requires :id, type: Integer
+    end
+    delete ":id" do
+      room = Room.find params[:id]
+
+      room.delete
+
+      success_response
+    end
   end
 end
