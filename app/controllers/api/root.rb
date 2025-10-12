@@ -53,6 +53,10 @@ class Api::Root < Grape::API
       { success: true, message: message, data: data }
     end
 
+    def success_response(message: "Success")
+      { success: true, message: message }
+    end
+
     def paginate_meta(collection, per_page = 10)
       {
         current_page: collection.current_page,
