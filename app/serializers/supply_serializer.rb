@@ -1,3 +1,3 @@
 class SupplySerializer < ActiveModel::Serializer
-  attributes :id, :name
+  attributes :id, :name, :unit
 end

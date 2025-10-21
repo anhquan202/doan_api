@@ -7,6 +7,8 @@ module Api
 
       mount Api::Admin::Auth
       mount Api::Admin::Room
+      mount Api::Admin::Utilities
+      mount Api::Admin::Supplies
     end
   end
 end
