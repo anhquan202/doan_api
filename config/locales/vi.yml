@@ -1,0 +1,10 @@
+vi:
+  enums:
+    utility:
+      utility_type:
+        electricity: 'Điện'
+        water: 'Nước'
+        internet: 'Internet'
+        parking: 'Giữ xe'
+        garbage: 'Rác'
+        cleaning: 'Dọn dẹp'
