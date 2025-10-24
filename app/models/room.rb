@@ -1,6 +1,7 @@
 class Room < ApplicationRecord
   before_validation :set_max_customers, on: [ :create, :update ]
   before_validation :set_room_name, on: :create
+  before_validation :set_default_status, on: :create
 
   has_many :room_supplies, dependent: :destroy
   has_many :room_utilities, dependent: :destroy
@@ -37,5 +38,9 @@ class Room < ApplicationRecord
       when "three"  then 3
       else 0
       end
+  end
+
+  def set_default_status
+    self.status ||= :available
   end
 end
