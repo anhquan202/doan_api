@@ -84,7 +84,7 @@ class Api::Admin::Room < Grape::API
       room = Room.includes(:supplies, :utilities).find(params[:id])
 
       data = {
-        room: ::RoomSerializer.new(room)
+        room: ::RoomDetailSerializer.new(room)
       }
 
       ok_response data: data
@@ -113,6 +113,19 @@ class Api::Admin::Room < Grape::API
       room.delete
 
       success_response
+    end
+
+    desc "Get list of room statuses"
+    get "status" do
+      data = Room.statuses.map do |key, value|
+        {
+          key: key,
+          label: I18n.t("activerecord.attributes.room.statuses.#{key}"),
+          value: value
+        }
+      end
+
+      ok_response data: data
     end
   end
 end

@@ -8,3 +8,11 @@ vi:
         parking: 'Giữ xe'
         garbage: 'Rác'
         cleaning: 'Dọn dẹp'
+  activerecord:
+    attributes:
+      room:
+        statuses:
+          available: 'Còn trống'
+          occupied: 'Đang thuê'
+          cleaning: 'Đang dọn dẹp'
+          repairing: 'Đang sửa chữa'
