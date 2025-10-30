@@ -9,6 +9,7 @@ module Api
       mount Api::Admin::Room
       mount Api::Admin::Utilities
       mount Api::Admin::Supplies
+      mount Api::Admin::OptionValues
     end
   end
 end

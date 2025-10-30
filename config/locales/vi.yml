@@ -8,6 +8,11 @@ vi:
         parking: 'Giữ xe'
         garbage: 'Rác'
         cleaning: 'Dọn dẹp'
+    supply:
+      unit:
+        piece: 'Chiếc'
+        set: 'Bộ'
+        unitless: 'Không đơn vị'
   activerecord:
     attributes:
       room:
