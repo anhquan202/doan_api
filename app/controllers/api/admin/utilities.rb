@@ -13,5 +13,18 @@ class Api::Admin::Utilities < Grape::API
 
       ok_response data: data
     end
+
+    desc "Edit fee`s supply"
+    params do
+      requires :id, type: Integer
+      optional :fee, type: BigDecimal
+    end
+    patch ":id" do
+      utitlity = Utility.find params[:id]
+
+      utitlity.update! fee: params[:fee]
+
+      success_response
+    end
   end
 end
