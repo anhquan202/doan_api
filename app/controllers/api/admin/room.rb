@@ -90,6 +90,28 @@ class Api::Admin::Room < Grape::API
       ok_response data: data
     end
 
+    desc "Get available Rooms"
+    params do
+      optional :page, type: Integer, default: 1, desc: "Page number"
+      optional :per_page, type: Integer, default: 10, desc: "Items per page"
+    end
+    get "available" do
+      page = params[:page] || 1
+      per_page = params[:per_page] || 10
+
+      rooms = Room.available.includes(:supplies, :utilities).paginate(page: page, per_page: per_page)
+
+      data = {
+        rooms: ActiveModel::SerializableResource.new(
+          rooms,
+          each_serializer: ::RoomSerializer
+        ),
+        meta: paginate_meta(rooms)
+      }
+
+      ok_response data: data
+    end
+
     desc "Update Room by ID"
     params do
       requires :id, type: Integer, desc: "Room ID"
