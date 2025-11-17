@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_09_165418) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_17_144911) do
   create_table "admins", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -64,11 +64,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_165418) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "term_months"
     t.index ["room_id"], name: "index_contracts_on_room_id"
   end
 
   create_table "customers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "idenity_code"
+    t.string "identity_code"
     t.string "first_name"
     t.string "last_name"
     t.string "email"
