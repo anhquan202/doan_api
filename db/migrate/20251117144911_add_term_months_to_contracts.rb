@@ -1,0 +1,5 @@
+class AddTermMonthsToContracts < ActiveRecord::Migration[8.0]
+  def change
+    add_column :contracts, :term_months, :integer
+  end
+end
