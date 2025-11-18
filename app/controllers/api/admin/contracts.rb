@@ -28,6 +28,28 @@ module Api
           ::Admin::CreateContractService.new(params).call
           success_response
         end
+
+        desc "List Contracts (paginated, serializer defines returned attributes)"
+        params do
+          optional :page, type: Integer, default: 1, desc: "Page number"
+          optional :per_page, type: Integer, default: 10, desc: "Items per page"
+        end
+        get do
+          page = params[:page] || 1
+          per_page = params[:per_page] || 10
+
+          contracts = ::Contract.paginate(page: page, per_page: per_page)
+
+          data = {
+            contracts: ActiveModel::SerializableResource.new(
+              contracts,
+              each_serializer: ::ContractSerializer
+            ),
+            meta: paginate_meta(contracts)
+          }
+
+          ok_response data: data
+        end
       end
     end
   end

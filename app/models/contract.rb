@@ -18,6 +18,16 @@ class Contract < ApplicationRecord
 
   after_create :set_contract_code
 
+  delegate :room_name, to: :room
+
+  def start_date_formatted
+    start_date&.strftime("%Y-%m-%d")
+  end
+
+  def end_date_formatted
+    end_date&.strftime("%Y-%m-%d")
+  end
+
   private
   def calculate_end_date
     return if start_date.blank? || term_months.blank?
