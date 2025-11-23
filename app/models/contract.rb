@@ -28,6 +28,13 @@ class Contract < ApplicationRecord
     end_date&.strftime("%Y-%m-%d")
   end
 
+  def representative_name
+    contract_customers.find_by(is_represent: true).full_name
+  end
+
+  def customers_count
+    contract_customers.count
+  end
   private
   def calculate_end_date
     return if start_date.blank? || term_months.blank?
