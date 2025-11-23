@@ -21,3 +21,8 @@ vi:
           occupied: 'Đang thuê'
           cleaning: 'Đang dọn dẹp'
           repairing: 'Đang sửa chữa'
+      contract:
+        statuses:
+          active: 'Đang hoạt động'
+          warning: 'Cảnh báo'
+          cancelled: 'Đã hủy'

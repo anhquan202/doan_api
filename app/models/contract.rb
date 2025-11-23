@@ -9,7 +9,7 @@ class Contract < ApplicationRecord
   validates :start_date, :end_date, presence: true
   validates :deposit, numericality: { greater_than_or_equal_to: 0 }
 
-  enum :status, active: 0, pending: 1, cancelled: 2
+  enum :status, active: 0, warning: 1, cancelled: 2
 
   accepts_nested_attributes_for :utilities, allow_destroy: true
   accepts_nested_attributes_for :customers, allow_destroy: true
@@ -34,6 +34,10 @@ class Contract < ApplicationRecord
 
   def customers_count
     contract_customers.count
+  end
+
+  def status_text
+    I18n.t("activerecord.attributes.contract.statuses.#{status}")
   end
   private
   def calculate_end_date
