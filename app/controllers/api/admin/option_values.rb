@@ -15,6 +15,20 @@ module Api
             ok_response data: data
           end
         end
+
+        resources :contracts do
+          desc "Get contract status options"
+          get "/status" do
+            data = Contract.statuses.map do |key, _|
+              {
+                key: key,
+                value: I18n.t("activerecord.attributes.contract.statuses.#{key}")
+              }
+            end
+
+            ok_response data: data
+          end
+        end
       end
     end
   end
