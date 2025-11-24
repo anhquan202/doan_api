@@ -26,3 +26,5 @@ vi:
           active: 'Đang hoạt động'
           warning: 'Cảnh báo'
           cancelled: 'Đã hủy'
+          overdue: 'Quá hạn'
+          terminated: 'Đã chấm dứt'

@@ -1,9 +1,8 @@
 module Api
   module Admin
     class Contracts < Grape::API
-      resources :contracts do
-        desc "Create contract"
-        params do
+      helpers do
+        params :create_params do
           requires :start_date, type: Date, desc: "Contract start date"
           requires :term_months, type: Integer, desc: "Contract Term in months"
           requires :deposit, type: Float, desc: "Contract deposit"
@@ -23,6 +22,13 @@ module Api
             requires :utility_id, type: Integer
             optional :status, type: Integer
           end
+        end
+      end
+
+      resources :contracts do
+        desc "Create contract"
+        params do
+          use :create_params
         end
         post do
           ::Admin::CreateContractService.new(params).call
@@ -49,6 +55,29 @@ module Api
           }
 
           ok_response data: data
+        end
+
+        desc "Update term months of the contract"
+        params do
+          requires :id, type: Integer, desc: "Contract ID"
+          requires :term_months, type: Integer, desc: "Contract Term in months"
+        end
+        patch ":id" do
+          contract = ::Contract.find(params[:id])
+          Rails.logger.info contract.customers.inspect
+          contract.update!(term_months: params[:term_months])
+          success_response
+        end
+
+        desc "Change status of the contract"
+        params do
+          requires :id, type: Integer, desc: "Contract ID"
+          requires :status, type: String, values: Contract.statuses.keys
+        end
+        patch ":id/status" do
+          contract = ::Contract.find(params[:id])
+          contract.update!(status: params[:status])
+          success_response
         end
       end
     end

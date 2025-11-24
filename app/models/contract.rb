@@ -9,10 +9,10 @@ class Contract < ApplicationRecord
   validates :start_date, :end_date, presence: true
   validates :deposit, numericality: { greater_than_or_equal_to: 0 }
 
-  enum :status, active: 0, warning: 1, cancelled: 2
+  enum :status, active: 0, warning: 1, overdue: 2, terminated: 3, cancelled: 4
 
-  accepts_nested_attributes_for :utilities, allow_destroy: true
-  accepts_nested_attributes_for :customers, allow_destroy: true
+  accepts_nested_attributes_for :contract_utilities, allow_destroy: true
+  accepts_nested_attributes_for :contract_customers, allow_destroy: true
 
   before_validation :calculate_end_date
 
