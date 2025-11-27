@@ -20,6 +20,20 @@ module Api
 
           ok_response data: data
         end
+
+        desc "Get customer by ID"
+        params do
+          requires :id, type: Integer, desc: "Customer ID"
+        end
+        get ":id" do
+          customer = Customer.includes(contract: :room).find params[:id]
+
+          data = {
+            customer: ::CustomerDetailSerializer.new(customer)
+          }
+
+          ok_response data: data
+        end
       end
     end
   end
