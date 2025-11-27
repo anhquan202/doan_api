@@ -29,7 +29,7 @@ class Contract < ApplicationRecord
   end
 
   def representative_name
-    contract_customers.find_by(is_represent: true).full_name
+    contract_customers.find_by(is_represent: true)&.full_name
   end
 
   def customers_count
