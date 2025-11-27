@@ -13,6 +13,14 @@ vi:
         piece: 'Chiếc'
         set: 'Bộ'
         unitless: 'Không đơn vị'
+    customer:
+      gender:
+        male: Nam
+        female: Nữ
+      status:
+        active: 'đang hoạt động'
+        warning: 'cảnh báo'
+        banned: 'bị cấm'
   activerecord:
     attributes:
       room:
