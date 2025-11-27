@@ -79,6 +79,23 @@ module Api
           contract.update!(status: params[:status])
           success_response
         end
+
+        desc "Show contract details (room supplies/utilities, contract customers)"
+        params do
+          requires :id, type: Integer, desc: "Contract ID"
+        end
+        get ":id" do
+          contract = ::Contract.find(params[:id])
+
+          data = {
+            contract: ActiveModel::SerializableResource.new(
+              contract,
+              serializer: ::ContractDetailSerializer
+            )
+          }
+
+          ok_response data: data
+        end
       end
     end
   end
