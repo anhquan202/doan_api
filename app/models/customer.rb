@@ -6,6 +6,9 @@ class Customer < ApplicationRecord
   enum :status, active: 0, warning: 1, banned: 2
   enum :gender, male: 0, female: 1
 
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :phone, :address, presence: true
+
   def full_name
     "#{first_name} #{last_name}"
   end
