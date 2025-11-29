@@ -45,7 +45,7 @@ module Api
         patch ":id" do
           customer = Customer.find(params[:id])
 
-          customer.update!(email: params[:email], phone: params[:phone], address: params[:address], status: params[:status])
+          customer.update!(email: params[:email], phone: params[:phone], address: params[:address])
 
           success_response
         end
