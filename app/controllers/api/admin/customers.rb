@@ -34,6 +34,21 @@ module Api
 
           ok_response data: data
         end
+
+        desc "Update customer information"
+        params do
+          requires :id, type: Integer, desc: "Customer ID"
+          requires :email, type: String, desc: "Email"
+          requires :phone, type: String, desc: "Phone"
+          requires :address, type: String, desc: "Address"
+        end
+        patch ":id" do
+          customer = Customer.find(params[:id])
+
+          customer.update!(email: params[:email], phone: params[:phone], address: params[:address], status: params[:status])
+
+          success_response
+        end
       end
     end
   end

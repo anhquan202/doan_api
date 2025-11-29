@@ -5,6 +5,10 @@ module Api
       version "v1", using: :path
       format :json
 
+      before do
+        I18n.locale = headers["Accept-Language"]&.to_sym || :vi
+      end
+
       mount Api::Admin::Auth
       mount Api::Admin::Room
       mount Api::Admin::Utilities
