@@ -1,5 +1,5 @@
 class CustomerDetailSerializer < ActiveModel::Serializer
-  attributes :id, :full_name, :email, :phone, :address, :gender, :date_of_birth, :room_name
+  attributes :id, :identity_code, :full_name, :email, :phone, :address, :gender, :date_of_birth, :room_name
 
   attribute :gender_text do
     I18n.t("enums.customer.gender.#{object.gender}", locale: :vi)
