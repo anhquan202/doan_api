@@ -16,6 +16,7 @@ module Api
       mount Api::Admin::OptionValues
       mount Api::Admin::Contracts
       mount Api::Admin::Customers
+      mount Api::Admin::Vehicles
     end
   end
 end

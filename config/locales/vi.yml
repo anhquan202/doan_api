@@ -55,3 +55,7 @@ vi:
           cancelled: 'Đã hủy'
           overdue: 'Quá hạn'
           terminated: 'Đã chấm dứt'
+      vehicle:
+        name:
+          bike: Xe đạp
+          motorbike: Xe máy

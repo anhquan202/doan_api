@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_17_144911) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_02_143423) do
   create_table "admins", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -130,12 +130,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_144911) do
   end
 
   create_table "vehicles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "customer_id"
-    t.string "license_plate"
-    t.integer "vehicle_type"
+    t.string "name"
+    t.text "description"
+    t.boolean "is_active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["customer_id"], name: "index_vehicles_on_customer_id"
   end
 
   add_foreign_key "contract_customers", "contracts"
@@ -145,5 +144,4 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_144911) do
   add_foreign_key "room_supplies", "supplies"
   add_foreign_key "room_utilities", "rooms", on_delete: :cascade
   add_foreign_key "room_utilities", "utilities"
-  add_foreign_key "vehicles", "customers"
 end
