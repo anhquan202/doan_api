@@ -15,8 +15,11 @@ class Room < ApplicationRecord
   accepts_nested_attributes_for :room_supplies, allow_destroy: true
   accepts_nested_attributes_for :room_utilities, allow_destroy: true
 
-  private
+  def self.ransackable_attributes(auth_object = nil)
+    [ "room_name", "status", "price", "room_type" ]
+  end
 
+  private
   def set_room_name
     last_room = Room.order(:room_name).last
 

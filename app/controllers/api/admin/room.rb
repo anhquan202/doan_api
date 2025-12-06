@@ -56,14 +56,29 @@ class Api::Admin::Room < Grape::API
 
     desc "List Rooms"
     params do
-      optional :page, type: Integer, default: 1, desc: "Page number"
-      optional :per_page, type: Integer, default: 10, desc: "Items per page"
+      optional :status, type: Array[Integer], desc: "Array of statuses"
+      optional :room_type, type: Array[Integer], desc: "Array of room types"
+      optional :q, type: String
+      optional :price_min, type: Integer
+      optional :price_max, type: Integer
+      optional :page, type: Integer, default: 1
+      optional :per_page, type: Integer, default: 10
     end
     get do
       page = params[:page] || 1
       per_page = params[:per_page] || 10
 
-      rooms = Room.includes(:supplies, :utilities).paginate(page: page, per_page: per_page)
+      search_params = {}
+      search_params[:room_name_cont] = params[:q] if params[:q].present?
+      search_params[:status_in]      = params[:status] if params[:status].present?
+      search_params[:room_type_in]   = params[:room_type] if params[:room_type].present?
+      search_params[:price_gteq] = params[:price_min] if params[:price_min].present?
+      search_params[:price_lteq] = params[:price_max] if params[:price_max].present?
+
+      base = Room.includes(:supplies, :utilities)
+
+      rooms = base.ransack(search_params).result
+      rooms = rooms.paginate(page: page, per_page: per_page)
 
       data = {
         rooms: ActiveModel::SerializableResource.new(
