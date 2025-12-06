@@ -61,3 +61,5 @@ gem "rack-cors"
 gem "active_model_serializers"
 
 gem "will_paginate", "~> 4.0"
+
+gem "ransack"
