@@ -2,6 +2,7 @@ class Contract < ApplicationRecord
   belongs_to :room
   has_many :contract_utilities, dependent: :destroy
   has_many :contract_customers, dependent: :destroy
+  has_many :meter_readings, dependent: :destroy
 
   has_many :utilities, through: :contract_utilities, dependent: :destroy
   has_many :customers, through: :contract_customers, dependent: :destroy

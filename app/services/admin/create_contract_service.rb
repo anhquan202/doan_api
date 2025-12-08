@@ -33,17 +33,6 @@ class Admin::CreateContractService
           is_represent: cus[:is_represent],
         )
       end
-
-      # create utilities
-      @params[:utilities].each do |ut|
-        ContractUtility.create!(
-          contract_id: contract.id,
-          utility_id: ut[:utility_id],
-          quantity: 0,
-          status: ut[:status] || 0
-        )
-      end
-
       contract
     end
   end
