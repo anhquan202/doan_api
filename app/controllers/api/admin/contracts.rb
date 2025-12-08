@@ -18,10 +18,6 @@ module Api
             requires :date_of_birth, type: Date
             requires :is_represent, type: Boolean
           end
-          requires :utilities, type: Array do
-            requires :utility_id, type: Integer
-            optional :status, type: Integer
-          end
         end
       end
 

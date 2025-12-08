@@ -9,6 +9,9 @@ class Room < ApplicationRecord
   has_many :supplies, through: :room_supplies, dependent: :destroy
   has_many :utilities, through: :room_utilities, dependent: :destroy
 
+  has_many :contracts, dependent: :destroy
+  has_many :meter_readings, through: :contracts, dependent: :destroy
+
   enum :room_type, single: 0, double: 1, three: 3
   enum :status, available: 0, occupied: 1, cleaning: 2, repairing: 3
 
