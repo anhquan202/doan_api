@@ -34,18 +34,21 @@ class Api::Admin::MeterReading < Grape::API
       page = params[:page] || 1
       per_page = params[:per_page] || 10
 
+      # Get contract IDs that have readings for the specified month and year
+      contract_ids = ::Contract
+        .joins(:electric_readings, :water_readings)
+        .where(
+          "electric_readings.month = ? AND electric_readings.year = ? OR water_readings.month = ? AND water_readings.year = ?",
+          month, year, month, year
+        )
+        .distinct
+        .pluck(:id)
+
+      # Fetch contracts with proper eager loading to prevent N+1
       contracts = ::Contract
-        .includes(:electric_readings, :water_readings)
+        .where(id: contract_ids)
+        .includes(:utilities, :electric_readings, :water_readings)
         .paginate(page: page, per_page: per_page)
-
-      search = contracts.ransack(
-        g: [
-          { electric_readings_month_eq: month, electric_readings_year_eq: year },
-          { water_readings_month_eq: month, water_readings_year_eq: year }
-        ]
-      )
-
-      contracts = search.result.distinct
 
       data = {
         meter_readings: ActiveModelSerializers::SerializableResource.new(

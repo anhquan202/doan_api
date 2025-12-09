@@ -1,5 +1,5 @@
 class MeterReadingSerializer < ActiveModel::Serializer
-  attributes :contract_id, :contract_code
+  attributes :contract_id, :contract_code, :fee_services
 
   has_many :electric_readings, serializer: ElectricReadingSerializer
   has_many :water_readings, serializer: WaterReadingSerializer
@@ -17,7 +17,7 @@ class MeterReadingSerializer < ActiveModel::Serializer
     year = instance_options[:year]
 
     if month && year
-      object.electric_readings.where(month: month, year: year)
+      object.electric_readings.select { |er| er.month == month && er.year == year }
     else
       object.electric_readings
     end
@@ -28,9 +28,13 @@ class MeterReadingSerializer < ActiveModel::Serializer
     year = instance_options[:year]
 
     if month && year
-      object.water_readings.where(month: month, year: year)
+      object.water_readings.select { |wr| wr.month == month && wr.year == year }
     else
       object.water_readings
     end
+  end
+
+  def fee_services
+    object.fee_services
   end
 end

@@ -44,4 +44,39 @@ Room.find_each do |room|
       quantity: quantity
     )
   end
+  puts "🔄 Đang cập nhật Contract Utilities..."
+
+  Contract.find_each do |contract|
+    room = contract.room
+
+    unless room
+      puts "⚠️  Hợp đồng ##{contract.id} không có phòng tương ứng, bỏ qua."
+      next
+    end
+
+    # Lấy tất cả utilities của room
+    room_utilities = room.utilities
+
+    if room_utilities.empty?
+      puts "⚠️  Phòng #{room.room_name} (ID: #{room.id}) không có utilities, bỏ qua."
+      next
+    end
+
+    # Lặp qua từng utility của room và tạo contract_utility nếu chưa tồn tại
+    room_utilities.each do |utility|
+      contract_utility = ContractUtility.find_or_create_by!(
+        contract_id: contract.id,
+        utility_id: utility.id
+      )
+
+      # Đặt status mặc định là active nếu bản ghi mới được tạo
+      if contract_utility.status.nil?
+        contract_utility.update!(status: :active)
+      end
+
+      puts "✅ Tạo/Cập nhật Contract Utility: Contract ##{contract.id} - Utility: #{utility.utility_type_label}"
+    end
+  end
+
+  puts "✨ Hoàn thành cập nhật Contract Utilities!"
 end

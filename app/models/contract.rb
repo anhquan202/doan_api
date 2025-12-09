@@ -40,6 +40,10 @@ class Contract < ApplicationRecord
     contract_customers.count
   end
 
+  def fee_services
+    utilities&.where.not(utility_type: [ :electricity, :water ])&.sum(:fee).to_i
+  end
+
   def status_text
     I18n.t("activerecord.attributes.contract.statuses.#{status}")
   end
