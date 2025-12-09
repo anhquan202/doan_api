@@ -15,6 +15,9 @@ class Contract < ApplicationRecord
   accepts_nested_attributes_for :contract_utilities, allow_destroy: true
   accepts_nested_attributes_for :contract_customers, allow_destroy: true
 
+  has_many :electric_readings, dependent: :destroy
+  has_many :water_readings, dependent: :destroy
+
   before_validation :calculate_end_date
 
   after_create :set_contract_code
@@ -40,6 +43,15 @@ class Contract < ApplicationRecord
   def status_text
     I18n.t("activerecord.attributes.contract.statuses.#{status}")
   end
+
+  def self.ransackable_attributes(auth_object = nil)
+    [ "contract_code", "deposit", "end_date", "id", "room_id", "start_date", "status", "term_months" ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [ "electric_readings", "water_readings" ]
+  end
+
   private
   def calculate_end_date
     return if start_date.blank? || term_months.blank?

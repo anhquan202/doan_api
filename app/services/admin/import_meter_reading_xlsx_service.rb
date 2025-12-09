@@ -14,40 +14,33 @@ class Admin::ImportMeterReadingXlsxService
 
     data_rows = rows.drop(4)
 
-    created_records = [] # để trả về thông tin đã tạo
+    created_records = []
 
     Room.transaction do
       data_rows.each do |row|
         next if row.compact.empty?
         next if row[0].nil?
 
-        # bắt buộc phải có đủ số
         next if [ row[1], row[2], row[3], row[5], row[6], row[7] ].any?(&:nil?)
 
         room = Room.find_by_room_name(row[0])
         contract = room&.contracts&.active&.first
         next if contract.nil?
 
-        # Tạo meter điện
-        meter_electric = MeterReading.create!(
+        meter_electric = ElectricReading.create!(
           contract_id:     contract.id,
-          reading_type:    0,
           start_num:       row[1],
           end_num:         row[2],
           fee_at_reading:  row[3],
-          total_fee:       safe_total(row[1], row[2], row[3]),
           month:           month,
           year:            year
         )
 
-        # Tạo meter nước
-        meter_water = MeterReading.create!(
+        meter_water = WaterReading.create!(
           contract_id:     contract.id,
-          reading_type:    1,
           start_num:       row[5],
           end_num:         row[6],
           fee_at_reading:  row[7],
-          total_fee:       safe_total(row[5], row[6], row[7]),
           month:           month,
           year:            year
         )

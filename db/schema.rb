@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_07_145701) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_09_144420) do
   create_table "admins", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -82,19 +82,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_07_145701) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "meter_readings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "electric_readings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "contract_id", null: false
-    t.integer "reading_type", default: 0, null: false
-    t.integer "start_num", null: false
-    t.integer "end_num", null: false
-    t.decimal "fee_at_reading", precision: 10, scale: 2, null: false
-    t.decimal "total_fee", precision: 10, scale: 2, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "start_num"
+    t.integer "end_num"
+    t.integer "fee_at_reading"
+    t.integer "total_fee"
     t.integer "month"
     t.integer "year"
-    t.index ["contract_id", "reading_type"], name: "index_meter_readings_on_contract_id_and_reading_type"
-    t.index ["contract_id"], name: "index_meter_readings_on_contract_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contract_id"], name: "index_electric_readings_on_contract_id"
   end
 
   create_table "room_supplies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -152,12 +150,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_07_145701) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "water_readings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "contract_id", null: false
+    t.integer "start_num"
+    t.integer "end_num"
+    t.integer "fee_at_reading"
+    t.integer "total_fee"
+    t.integer "month"
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contract_id"], name: "index_water_readings_on_contract_id"
+  end
+
   add_foreign_key "contract_customers", "contracts"
   add_foreign_key "contract_customers", "customers"
   add_foreign_key "contracts", "rooms"
-  add_foreign_key "meter_readings", "contracts"
+  add_foreign_key "electric_readings", "contracts"
   add_foreign_key "room_supplies", "rooms", on_delete: :cascade
   add_foreign_key "room_supplies", "supplies"
   add_foreign_key "room_utilities", "rooms", on_delete: :cascade
   add_foreign_key "room_utilities", "utilities"
+  add_foreign_key "water_readings", "contracts"
 end
