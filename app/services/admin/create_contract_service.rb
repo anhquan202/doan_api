@@ -31,6 +31,7 @@ class Admin::CreateContractService
           contract_id: contract.id,
           customer_id: customer.id,
           is_represent: cus[:is_represent],
+          move_in_date: @params[:start_date]
         )
       end
       contract
