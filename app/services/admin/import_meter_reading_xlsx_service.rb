@@ -27,22 +27,38 @@ class Admin::ImportMeterReadingXlsxService
         contract = room&.contracts&.active&.first
         next if contract.nil?
 
-        meter_electric = ElectricReading.create!(
-          contract_id:     contract.id,
-          start_num:       row[1],
-          end_num:         row[2],
-          fee_at_reading:  row[3],
-          month:           month,
-          year:            year
+        meter_electric = ElectricReading.find_or_create_by!(
+          contract_id: contract.id,
+          month: month,
+          year: year
+        ) do |record|
+          record.start_num = row[1]
+          record.end_num = row[2]
+          record.fee_at_reading = row[3]
+        end
+
+        # Update if already exists
+        meter_electric.update!(
+          start_num: row[1],
+          end_num: row[2],
+          fee_at_reading: row[3]
         )
 
-        meter_water = WaterReading.create!(
-          contract_id:     contract.id,
-          start_num:       row[5],
-          end_num:         row[6],
-          fee_at_reading:  row[7],
-          month:           month,
-          year:            year
+        meter_water = WaterReading.find_or_create_by!(
+          contract_id: contract.id,
+          month: month,
+          year: year
+        ) do |record|
+          record.start_num = row[5]
+          record.end_num = row[6]
+          record.fee_at_reading = row[7]
+        end
+
+        # Update if already exists
+        meter_water.update!(
+          start_num: row[5],
+          end_num: row[6],
+          fee_at_reading: row[7]
         )
 
         created_records << {
