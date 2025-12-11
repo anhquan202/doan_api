@@ -34,6 +34,10 @@ class Admin::CreateContractService
           move_in_date: @params[:start_date]
         )
       end
+
+      room = Room.find(@params[:room_id])
+      room.update!(status: :occupied)
+
       contract
     end
   end
