@@ -1,5 +1,5 @@
 class RoomSerializer < ActiveModel::Serializer
-  attributes :id, :room_type, :room_name, :status, :price, :max_customers, :description
+  attributes :id, :room_type, :room_name, :status, :price, :max_customers, :description, :room_type_label
 
   has_many :supplies, serializer: SupplySerializer do
     object.supplies.order(id: :asc)

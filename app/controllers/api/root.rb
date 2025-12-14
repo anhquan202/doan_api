@@ -11,11 +11,25 @@ class Api::Root < Grape::API
   end
 
   rescue_from ActiveRecord::RecordInvalid do |e|
-    error!({ success: false, message: "Validation failed", errors: e.record.errors.to_hash(true) }, 422)
+    formatted = {}
+    e.record.errors.messages.each do |attr, msgs|
+      human = e.record.class.human_attribute_name(attr)
+      # remove leading human attribute name from messages (e.g. "Identity code Đã tồn tại" -> "Đã tồn tại")
+      text = msgs.map do |m|
+        m.to_s.start_with?(human) ? m.to_s.sub(/^#{Regexp.escape(human)}\s*/, "") : m.to_s
+      end.join(", ")
+      formatted[attr.to_s] = text
+    end
+
+    error!({ success: false, message: "Validation failed", errors: formatted }, 422)
   end
 
   rescue_from Grape::Exceptions::ValidationErrors do |e|
-    formatted_errors = e.errors.transform_keys { |k| k.join(".") }
+    formatted_errors = e.errors.each_with_object({}) do |(k, v), memo|
+      key = Array(k).join(".").split(".").last
+      memo[key] = v.is_a?(Array) ? v.join(", ") : v.to_s
+    end
+
     error!({
       success: false,
       message: "Validation failed from Grape",

@@ -23,6 +23,10 @@ vi:
         banned: 'bị cấm'
   activerecord:
     errors:
+      messages:
+        taken: 'Đã tồn tại'
+        blank: 'không được để trống'
+        invalid: 'không hợp lệ'
       models:
         customer:
           attributes:
@@ -71,3 +75,9 @@ vi:
         name:
           bike: Xe đạp
           motorbike: Xe máy
+
+  errors:
+    messages:
+      taken: 'Đã tồn tại'
+      blank: 'không được để trống'
+      invalid: 'không hợp lệ'

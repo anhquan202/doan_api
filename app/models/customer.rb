@@ -8,6 +8,7 @@ class Customer < ApplicationRecord
 
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :phone, :address, presence: true
+  validates :identity_code, presence: true, uniqueness: true
 
   def full_name
     "#{first_name} #{last_name}"
