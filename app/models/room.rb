@@ -22,6 +22,10 @@ class Room < ApplicationRecord
     [ "room_name", "status", "price", "room_type" ]
   end
 
+  def room_type_label
+    I18n.t("activerecord.attributes.room.room_types.#{room_type}")
+  end
+
   private
   def set_room_name
     last_room = Room.order(:room_name).last

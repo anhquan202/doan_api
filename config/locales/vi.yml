@@ -48,6 +48,18 @@ vi:
           occupied: 'Đang thuê'
           cleaning: 'Đang dọn dẹp'
           repairing: 'Đang sửa chữa'
+        room_types:
+          single: 'Phòng đơn'
+          double: 'Phòng đôi'
+          three: 'Phòng ba'
+      utility:
+        utility_types:
+          electricity: 'Điện'
+          water: 'Nước'
+          internet: 'Internet'
+          parking: 'Giữ xe'
+          garbage: 'Rác'
+          cleaning: 'Dọn dẹp'
       contract:
         statuses:
           active: 'Đang hoạt động'
