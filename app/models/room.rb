@@ -18,6 +18,15 @@ class Room < ApplicationRecord
   accepts_nested_attributes_for :room_supplies, allow_destroy: true
   accepts_nested_attributes_for :room_utilities, allow_destroy: true
 
+  scope :available_rooms, -> { where(status: :available) }
+  scope :occupied_rooms, -> { where(status: :occupied) }
+  scope :cleaning_rooms, -> { where(status: :cleaning) }
+  scope :repairing_rooms, -> { where(status: :repairing) }
+
+  validates :room_name, presence: true, uniqueness: true
+  validates :room_type, presence: true
+  validates :price, numericality: { greater_than_or_equal_to: 0 }
+
   def self.ransackable_attributes(auth_object = nil)
     [ "room_name", "status", "price", "room_type" ]
   end

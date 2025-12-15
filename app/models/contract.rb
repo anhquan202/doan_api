@@ -24,6 +24,14 @@ class Contract < ApplicationRecord
 
   delegate :room_name, to: :room
 
+  scope :almost_expired, ->(days = 30, limit = 5) {
+    where(status: :active).where(end_date: Date.today..days.days.from_now.to_date).limit(limit)
+  }
+
+  scope :warning_contracts, ->(limit = 5) {
+    where(status: :warning).limit(limit)
+  }
+
   def start_date_formatted
     start_date&.strftime("%Y-%m-%d")
   end

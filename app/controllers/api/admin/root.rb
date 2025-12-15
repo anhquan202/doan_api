@@ -18,6 +18,7 @@ module Api
       mount Api::Admin::Customers
       mount Api::Admin::Vehicles
       mount Api::Admin::MeterReading
+      mount Api::Admin::Dashboard
     end
   end
 end
