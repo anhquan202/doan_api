@@ -1,3 +1,9 @@
+# DEPRECATED: Use Admin::ContractWizard services instead
+# This service is kept for backward compatibility with the old single-step API
+# New wizard flow:
+#   - Step 1: Admin::ContractWizard::Step1CustomersService (create customers with vehicles)
+#   - Step 2: Admin::ContractWizard::Step2TermService (set rental term)
+#   - Step 3: Admin::ContractWizard::Step3CompleteService (finalize contract)
 class Admin::CreateContractService
   def initialize(params)
     @params = params
@@ -7,14 +13,25 @@ class Admin::CreateContractService
     ActiveRecord::Base.transaction do
       contract = Contract.create!(
         start_date: @params[:start_date],
-        term_months:   @params[:term_months],
-        deposit:    @params[:deposit],
-        room_id:    @params[:room_id],
-        status:     :active
+        term_months: @params[:term_months],
+        deposit: @params[:deposit],
+        room_id: @params[:room_id],
+        status: :active
       )
 
       # create customers and join table
       @params[:customers].each do |cus|
+        # Build vehicle_data JSON if present
+        vehicle_json = nil
+        if cus[:vehicle].present?
+          vehicle = Vehicle.find_by(id: cus[:vehicle][:vehicle_id])
+          vehicle_json = {
+            vehicle_id: cus[:vehicle][:vehicle_id],
+            vehicle_name: vehicle&.name,
+            plate_number: cus[:vehicle][:plate_number]
+          }
+        end
+
         customer = Customer.create!(
           identity_code: cus[:identity_code],
           first_name: cus[:first_name],
@@ -24,7 +41,8 @@ class Admin::CreateContractService
           address: cus[:address],
           gender: cus[:gender],
           date_of_birth: cus[:date_of_birth],
-          status: 1
+          status: :active,
+          vehicle_data: vehicle_json
         )
 
         ContractCustomer.create!(
