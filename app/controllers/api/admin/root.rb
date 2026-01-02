@@ -15,6 +15,7 @@ module Api
       mount Api::Admin::Supplies
       mount Api::Admin::OptionValues
       mount Api::Admin::Contracts
+      mount Api::Admin::ContractWizard
       mount Api::Admin::Customers
       mount Api::Admin::Vehicles
       mount Api::Admin::MeterReading
