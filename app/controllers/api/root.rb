@@ -24,6 +24,10 @@ class Api::Root < Grape::API
     error!({ success: false, message: "Validation failed", errors: formatted }, 422)
   end
 
+  rescue_from ArgumentError do |e|
+    error!({ success: false, message: e.message }, 422)
+  end
+
   rescue_from Grape::Exceptions::ValidationErrors do |e|
     formatted_errors = e.errors.each_with_object({}) do |(k, v), memo|
       key = Array(k).join(".").split(".").last

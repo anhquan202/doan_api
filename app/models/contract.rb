@@ -17,6 +17,7 @@ class Contract < ApplicationRecord
 
   has_many :electric_readings, dependent: :destroy
   has_many :water_readings, dependent: :destroy
+  has_many :monthly_invoices, dependent: :destroy
 
   before_validation :calculate_end_date
 

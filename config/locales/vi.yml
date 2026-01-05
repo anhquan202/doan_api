@@ -21,6 +21,12 @@ vi:
         active: 'đang hoạt động'
         warning: 'cảnh báo'
         banned: 'bị cấm'
+    monthly_invoice:
+      status:
+        pending: 'Chưa thanh toán'
+        paid: 'Đã thanh toán'
+        overdue: 'Quá hạn'
+        cancelled: 'Đã hủy'
   activerecord:
     errors:
       messages:

@@ -5,9 +5,13 @@ class Api::Admin::MeterReading < Grape::API
     desc "Import meter reading from XLSX file"
     params do
       requires :meter_file, type: File, desc: "XLSX file"
+      optional :generate_invoices, type: Boolean, default: false, desc: "Auto generate monthly invoices after import"
     end
     post "import/xlsx" do
-      data = ::Admin::ImportMeterReadingXlsxService.new(params[:meter_file]).call
+      data = ::Admin::ImportMeterReadingXlsxService.new(
+        params[:meter_file],
+        generate_invoices: params[:generate_invoices]
+      ).call
 
       ok_response data: data
     end
