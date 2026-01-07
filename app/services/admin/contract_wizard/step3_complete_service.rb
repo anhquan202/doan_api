@@ -3,9 +3,11 @@ class Admin::ContractWizard::Step3CompleteService
     @draft_id = params[:draft_id]
   end
 
-  def call
-    ActiveRecord::Base.transaction do
-      draft = find_and_validate_draft
+      def call
+        contract = nil
+
+        ActiveRecord::Base.transaction do
+          draft = find_and_validate_draft
 
       # Create contract
       contract = create_contract(draft)
@@ -16,12 +18,15 @@ class Admin::ContractWizard::Step3CompleteService
       # Update room status
       update_room_status(draft)
 
-      # Mark draft as completed
-      draft.update!(status: :completed, current_step: 3)
+          # Mark draft as completed
+          draft.update!(status: :completed, current_step: 3)
+        end
 
-      contract
-    end
-  end
+        # Gửi email thông báo tạo hợp đồng thành công (sau transaction)
+        send_contract_created_email(contract) if contract
+
+        contract
+      end
 
   private
 
@@ -84,8 +89,17 @@ class Admin::ContractWizard::Step3CompleteService
     end
   end
 
-  def update_room_status(draft)
-    room = Room.find(draft.room_id)
-    room.update!(status: :occupied)
+      def update_room_status(draft)
+        room = Room.find(draft.room_id)
+        room.update!(status: :occupied)
+      end
+
+      def send_contract_created_email(contract)
+        ContractMailer.contract_created(contract).deliver_later
+      rescue => e
+        Rails.logger.error "[Step3CompleteService] Failed to send contract created email: #{e.message}"
+      end
+    end
   end
 end
+

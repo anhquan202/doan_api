@@ -9,7 +9,44 @@
 #     priority: 2
 #     schedule: at 5am every day
 
+development:
+  # Nhắc nhở thanh toán vào 8h sáng ngày mùng 5 hàng tháng
+  payment_reminder:
+    class: PaymentReminderJob
+    queue: default
+    schedule: at 8am on the 5th day of every month
+
+  # Kiểm tra quá hạn vào 8h sáng ngày mùng 10 hàng tháng
+  payment_overdue_check:
+    class: PaymentOverdueCheckJob
+    queue: default
+    schedule: at 8am on the 10th day of every month
+
+  # Cleanup expired contract drafts hàng ngày
+  cleanup_expired_drafts:
+    class: CleanupExpiredDraftsJob
+    queue: default
+    schedule: at 2am every day
+
 production:
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
+
+  # Nhắc nhở thanh toán vào 8h sáng ngày mùng 5 hàng tháng
+  payment_reminder:
+    class: PaymentReminderJob
+    queue: default
+    schedule: at 8am on the 5th day of every month
+
+  # Kiểm tra quá hạn vào 8h sáng ngày mùng 10 hàng tháng
+  payment_overdue_check:
+    class: PaymentOverdueCheckJob
+    queue: default
+    schedule: at 8am on the 10th day of every month
+
+  # Cleanup expired contract drafts hàng ngày
+  cleanup_expired_drafts:
+    class: CleanupExpiredDraftsJob
+    queue: default
+    schedule: at 2am every day

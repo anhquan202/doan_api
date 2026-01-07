@@ -10,6 +10,8 @@ class Admin::CreateContractService
   end
 
   def call
+    contract = nil
+
     ActiveRecord::Base.transaction do
       contract = Contract.create!(
         start_date: @params[:start_date],
@@ -55,8 +57,19 @@ class Admin::CreateContractService
 
       room = Room.find(@params[:room_id])
       room.update!(status: :occupied)
-
-      contract
     end
+
+    # Gửi email thông báo tạo hợp đồng thành công (sau transaction)
+    send_contract_created_email(contract) if contract
+
+    contract
+  end
+
+  private
+
+  def send_contract_created_email(contract)
+    ContractMailer.contract_created(contract).deliver_later
+  rescue => e
+    Rails.logger.error "[CreateContractService] Failed to send contract created email: #{e.message}"
   end
 end

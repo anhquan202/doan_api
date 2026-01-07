@@ -65,3 +65,5 @@ gem "will_paginate", "~> 4.0"
 gem "ransack"
 
 gem "roo", "~> 3.0.0"
+
+gem 'letter_opener_web', '~> 3.0'
