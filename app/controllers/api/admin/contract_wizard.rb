@@ -1,7 +1,7 @@
 module Api
   module Admin
     class ContractWizard < Grape::API
-      namespace :contract_wizard do
+      resources :contract_wizard do
         # ============================================
         # Step 1: Create customers with vehicles
         # ============================================
@@ -16,7 +16,7 @@ module Api
             requires :email, type: String, desc: "Email"
             requires :phone, type: String, desc: "Phone number"
             requires :address, type: String, desc: "Address"
-            requires :gender, type: Integer, values: [0, 1], desc: "Gender: 0=male, 1=female"
+            requires :gender, type: Integer, values: [ 0, 1 ], desc: "Gender: 0=male, 1=female"
             requires :date_of_birth, type: Date, desc: "Date of birth"
             requires :is_represent, type: Boolean, desc: "Is representative"
             optional :vehicle, type: Hash do
@@ -130,4 +130,3 @@ module Api
     end
   end
 end
-

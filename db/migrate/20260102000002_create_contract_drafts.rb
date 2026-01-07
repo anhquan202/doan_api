@@ -3,7 +3,7 @@ class CreateContractDrafts < ActiveRecord::Migration[8.0]
     create_table :contract_drafts do |t|
       t.references :room, null: false, foreign_key: true
       t.integer :current_step, default: 1, null: false
-      t.json :customers_data, default: []
+      t.json :customers_data, null: false
       t.date :start_date
       t.integer :term_months
       t.decimal :deposit, precision: 10
@@ -17,4 +17,3 @@ class CreateContractDrafts < ActiveRecord::Migration[8.0]
     add_index :contract_drafts, :expires_at
   end
 end
-

@@ -5,8 +5,11 @@ class RoomSerializer < ActiveModel::Serializer
     object.supplies.order(id: :asc)
   end
 
-  has_many :utilities do
-    object.room_utilities.includes(:utility).sort_by { |ru| ru.utility.id }.map do |ru|
+  attribute :utilities
+
+  def utilities
+    rus = object.association(:room_utilities).loaded? ? object.room_utilities : object.room_utilities.includes(:utility)
+    rus.sort_by { |ru| ru.utility.id }.map do |ru|
       UtilitySerializer.new(ru.utility, room_utility: ru).as_json
     end
   end

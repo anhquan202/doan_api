@@ -12,7 +12,7 @@ class CreateMonthlyInvoices < ActiveRecord::Migration[8.0]
       t.decimal :service_fee, precision: 12, scale: 0, default: 0
 
       # Chi tiết dịch vụ (JSON để lưu breakdown)
-      t.json :service_details, default: []
+      t.json :service_details, null: false
 
       # Điều chỉnh
       t.decimal :adjustment, precision: 12, scale: 0, default: 0
@@ -30,9 +30,8 @@ class CreateMonthlyInvoices < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :monthly_invoices, [:contract_id, :month, :year], unique: true, name: "idx_invoices_contract_period"
+    add_index :monthly_invoices, [ :contract_id, :month, :year ], unique: true, name: "idx_invoices_contract_period"
     add_index :monthly_invoices, :status
-    add_index :monthly_invoices, [:year, :month]
+    add_index :monthly_invoices, [ :year, :month ]
   end
 end
-

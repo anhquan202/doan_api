@@ -47,7 +47,7 @@ class Api::Admin::Room < Grape::API
       room = Room.create!(payload)
 
       if room.save
-        new_room = Room.includes(:supplies, :utilities).find(room.id)
+        new_room = Room.includes(:supplies, room_utilities: :utility, room_supplies: :supply).find(room.id)
         ok_response data: ::RoomSerializer.new(new_room)
       else
         error_response(message: "Validation failed", errors: room.errors.full_messages)
@@ -75,7 +75,7 @@ class Api::Admin::Room < Grape::API
       search_params[:price_gteq] = params[:price_min] if params[:price_min].present?
       search_params[:price_lteq] = params[:price_max] if params[:price_max].present?
 
-      base = Room.includes(:supplies, :utilities)
+      base = Room.includes(:supplies, room_utilities: :utility, room_supplies: :supply)
 
       rooms = base.ransack(search_params).result
       rooms = rooms.paginate(page: page, per_page: per_page)
@@ -96,7 +96,7 @@ class Api::Admin::Room < Grape::API
       requires :id, type: Integer, desc: "Room ID"
     end
     get ":id" do
-      room = Room.includes(:supplies, :utilities).find(params[:id])
+      room = Room.includes(:supplies, room_utilities: :utility, room_supplies: :supply).find(params[:id])
 
       data = {
         room: ::RoomDetailSerializer.new(room)
@@ -114,7 +114,7 @@ class Api::Admin::Room < Grape::API
       page = params[:page] || 1
       per_page = params[:per_page] || 10
 
-      rooms = Room.available.includes(:supplies, :utilities).paginate(page: page, per_page: per_page)
+      rooms = Room.available.includes(:supplies, room_utilities: :utility, room_supplies: :supply).paginate(page: page, per_page: per_page)
 
       data = {
         rooms: ActiveModel::SerializableResource.new(

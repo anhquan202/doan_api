@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_09_144420) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_02_000003) do
   create_table "admins", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -42,6 +42,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_09_144420) do
     t.datetime "updated_at", null: false
     t.index ["contract_id"], name: "index_contract_customers_on_contract_id"
     t.index ["customer_id"], name: "index_contract_customers_on_customer_id"
+  end
+
+  create_table "contract_drafts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "room_id", null: false
+    t.integer "current_step", default: 1, null: false
+    t.json "customers_data", null: false
+    t.date "start_date"
+    t.integer "term_months"
+    t.decimal "deposit", precision: 10
+    t.integer "status", default: 0, null: false
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "index_contract_drafts_on_expires_at"
+    t.index ["room_id"], name: "index_contract_drafts_on_room_id"
+    t.index ["status"], name: "index_contract_drafts_on_status"
   end
 
   create_table "contract_utilities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -80,6 +96,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_09_144420) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "vehicle_data"
   end
 
   create_table "electric_readings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -93,6 +110,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_09_144420) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contract_id"], name: "index_electric_readings_on_contract_id"
+  end
+
+  create_table "monthly_invoices", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "contract_id", null: false
+    t.integer "month", null: false
+    t.integer "year", null: false
+    t.decimal "room_fee", precision: 12, default: "0"
+    t.decimal "electric_fee", precision: 12, default: "0"
+    t.decimal "water_fee", precision: 12, default: "0"
+    t.decimal "service_fee", precision: 12, default: "0"
+    t.json "service_details", null: false
+    t.decimal "adjustment", precision: 12, default: "0"
+    t.string "adjustment_note"
+    t.decimal "total_amount", precision: 12, default: "0"
+    t.integer "status", default: 0, null: false
+    t.datetime "paid_at"
+    t.string "payment_method"
+    t.text "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contract_id", "month", "year"], name: "idx_invoices_contract_period", unique: true
+    t.index ["contract_id"], name: "index_monthly_invoices_on_contract_id"
+    t.index ["status"], name: "index_monthly_invoices_on_status"
+    t.index ["year", "month"], name: "index_monthly_invoices_on_year_and_month"
   end
 
   create_table "room_supplies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -165,8 +206,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_09_144420) do
 
   add_foreign_key "contract_customers", "contracts"
   add_foreign_key "contract_customers", "customers"
+  add_foreign_key "contract_drafts", "rooms"
   add_foreign_key "contracts", "rooms"
   add_foreign_key "electric_readings", "contracts"
+  add_foreign_key "monthly_invoices", "contracts"
   add_foreign_key "room_supplies", "rooms", on_delete: :cascade
   add_foreign_key "room_supplies", "supplies"
   add_foreign_key "room_utilities", "rooms", on_delete: :cascade

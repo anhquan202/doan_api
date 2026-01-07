@@ -1,5 +1,5 @@
 class Admin::ImportMeterReadingXlsxService
-  def initialize(file, generate_invoices: false)
+  def initialize(file, generate_invoices: true)
     @file = file
     @generate_invoices = generate_invoices
   end
