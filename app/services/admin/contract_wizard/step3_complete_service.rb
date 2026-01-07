@@ -89,17 +89,14 @@ class Admin::ContractWizard::Step3CompleteService
     end
   end
 
-      def update_room_status(draft)
-        room = Room.find(draft.room_id)
-        room.update!(status: :occupied)
-      end
+  def update_room_status(draft)
+    room = Room.find(draft.room_id)
+    room.update!(status: :occupied)
+  end
 
-      def send_contract_created_email(contract)
-        ContractMailer.contract_created(contract).deliver_later
-      rescue => e
-        Rails.logger.error "[Step3CompleteService] Failed to send contract created email: #{e.message}"
-      end
-    end
+  def send_contract_created_email(contract)
+    ContractMailer.contract_created(contract).deliver_later
+  rescue => e
+    Rails.logger.error "[Step3CompleteService] Failed to send contract created email: #{e.message}"
   end
 end
-
