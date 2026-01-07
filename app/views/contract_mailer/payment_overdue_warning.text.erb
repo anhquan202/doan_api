@@ -1,0 +1,25 @@
+Xin chào <%= @representative&.full_name %>,
+
+🚨 CẢNH BÁO: Hợp đồng của bạn đã QUÁ HẠN THANH TOÁN cho tháng <%= @invoice.month %>/<%= @invoice.year %>.
+
+Trạng thái hợp đồng đã được chuyển sang QUÁ HẠN (OVERDUE).
+
+THÔNG TIN HÓA ĐƠN:
+- Mã hợp đồng: <%= @contract.contract_code %>
+- Phòng: <%= @room&.room_name %>
+- Tiền phòng: <%= number_to_currency(@invoice.room_fee, unit: "đ", format: "%n %u", delimiter: ".") %>
+- Tiền điện: <%= number_to_currency(@invoice.electric_fee, unit: "đ", format: "%n %u", delimiter: ".") %>
+- Tiền nước: <%= number_to_currency(@invoice.water_fee, unit: "đ", format: "%n %u", delimiter: ".") %>
+- Phí dịch vụ: <%= number_to_currency(@invoice.service_fee, unit: "đ", format: "%n %u", delimiter: ".") %>
+
+SỐ TIỀN CÒN NỢ: <%= number_to_currency(@invoice.total_amount, unit: "đ", format: "%n %u", delimiter: ".") %>
+
+Vui lòng thanh toán ngay để tránh các hậu quả nghiêm trọng hơn.
+
+Nếu bạn đã thanh toán, vui lòng liên hệ với chúng tôi để cập nhật trạng thái.
+
+Trân trọng,
+Ban Quản Lý Phòng Trọ
+
+---
+Email này được gửi tự động, vui lòng không trả lời.

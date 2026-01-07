@@ -7,6 +7,8 @@ module Admin
       end
 
       def call
+        contract = nil
+
         ActiveRecord::Base.transaction do
           draft = find_and_validate_draft
 
@@ -21,9 +23,12 @@ module Admin
 
           # Mark draft as completed
           draft.update!(status: :completed, current_step: 3)
-
-          contract
         end
+
+        # Gửi email thông báo tạo hợp đồng thành công (sau transaction)
+        send_contract_created_email(contract) if contract
+
+        contract
       end
 
       private
@@ -90,6 +95,12 @@ module Admin
       def update_room_status(draft)
         room = Room.find(draft.room_id)
         room.update!(status: :occupied)
+      end
+
+      def send_contract_created_email(contract)
+        ContractMailer.contract_created(contract).deliver_later
+      rescue => e
+        Rails.logger.error "[Step3CompleteService] Failed to send contract created email: #{e.message}"
       end
     end
   end

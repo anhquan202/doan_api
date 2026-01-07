@@ -1,0 +1,22 @@
+Xin chào <%= @representative&.full_name %>,
+
+Đây là email nhắc nhở thanh toán tiền phòng tháng <%= @invoice.month %>/<%= @invoice.year %>.
+
+THÔNG TIN HÓA ĐƠN:
+- Mã hợp đồng: <%= @contract.contract_code %>
+- Phòng: <%= @room&.room_name %>
+- Tiền phòng: <%= number_to_currency(@invoice.room_fee, unit: "đ", format: "%n %u", delimiter: ".") %>
+- Tiền điện: <%= number_to_currency(@invoice.electric_fee, unit: "đ", format: "%n %u", delimiter: ".") %>
+- Tiền nước: <%= number_to_currency(@invoice.water_fee, unit: "đ", format: "%n %u", delimiter: ".") %>
+- Phí dịch vụ: <%= number_to_currency(@invoice.service_fee, unit: "đ", format: "%n %u", delimiter: ".") %>
+<% if @invoice.adjustment != 0 %>- Điều chỉnh: <%= number_to_currency(@invoice.adjustment, unit: "đ", format: "%n %u", delimiter: ".") %><% end %>
+
+TỔNG CỘNG: <%= number_to_currency(@invoice.total_amount, unit: "đ", format: "%n %u", delimiter: ".") %>
+
+⚠️ LƯU Ý: Vui lòng thanh toán trước ngày 10/<%= @invoice.month %>/<%= @invoice.year %> để tránh bị tính phí trễ hạn và chuyển trạng thái hợp đồng sang quá hạn.
+
+Trân trọng,
+Ban Quản Lý Phòng Trọ
+
+---
+Email này được gửi tự động, vui lòng không trả lời.

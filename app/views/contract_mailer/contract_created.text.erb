@@ -1,0 +1,21 @@
+Xin chào <%= @representative&.full_name %>,
+
+Chúng tôi xin thông báo hợp đồng thuê phòng của bạn đã được tạo thành công với thông tin như sau:
+
+- Mã hợp đồng: <%= @contract.contract_code %>
+- Phòng: <%= @room&.room_name %>
+- Ngày bắt đầu: <%= @contract.start_date&.strftime("%d/%m/%Y") %>
+- Ngày kết thúc: <%= @contract.end_date&.strftime("%d/%m/%Y") %>
+- Thời hạn: <%= @contract.term_months %> tháng
+- Tiền đặt cọc: <%= number_to_currency(@contract.deposit, unit: "đ", format: "%n %u", delimiter: ".") %>
+- Giá phòng: <%= number_to_currency(@room&.price, unit: "đ", format: "%n %u", delimiter: ".") %>/tháng
+
+Vui lòng thanh toán tiền phòng trước ngày 10 hàng tháng để tránh bị tính phí trễ hạn.
+
+Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi.
+
+Trân trọng,
+Ban Quản Lý Phòng Trọ
+
+---
+Email này được gửi tự động, vui lòng không trả lời.
