@@ -41,24 +41,24 @@
         </tr>
         <tr>
           <td>Tiền phòng:</td>
-          <td><%= number_to_currency(@invoice.room_fee, unit: "đ", format: "%n %u", delimiter: ".") %></td>
+          <td><%= number_with_delimiter(@invoice.room_fee, delimiter: ".") %> đ</td>
         </tr>
         <tr>
           <td>Tiền điện:</td>
-          <td><%= number_to_currency(@invoice.electric_fee, unit: "đ", format: "%n %u", delimiter: ".") %></td>
+          <td><%= number_with_delimiter(@invoice.electric_fee, delimiter: ".") %> đ</td>
         </tr>
         <tr>
           <td>Tiền nước:</td>
-          <td><%= number_to_currency(@invoice.water_fee, unit: "đ", format: "%n %u", delimiter: ".") %></td>
+          <td><%= number_with_delimiter(@invoice.water_fee, delimiter: ".") %> đ</td>
         </tr>
         <tr>
           <td>Phí dịch vụ:</td>
-          <td><%= number_to_currency(@invoice.service_fee, unit: "đ", format: "%n %u", delimiter: ".") %></td>
+          <td><%= number_with_delimiter(@invoice.service_fee, delimiter: ".") %> đ</td>
         </tr>
       </table>
       
       <div class="total">
-        Số tiền còn nợ: <%= number_to_currency(@invoice.total_amount, unit: "đ", format: "%n %u", delimiter: ".") %>
+        Số tiền còn nợ: <%= number_with_delimiter(@invoice.total_amount, delimiter: ".") %> đ
       </div>
       
       <p><strong>Vui lòng thanh toán ngay để tránh các hậu quả nghiêm trọng hơn.</strong></p>

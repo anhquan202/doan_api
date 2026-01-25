@@ -1,5 +1,5 @@
 class MonthlyInvoiceSerializer < ActiveModel::Serializer
-  attributes :id, :contract_id, :contract_code, :room_name,
+  attributes :id, :contract_id, :contract_code, :room_name, :water_reading, :electric_reading,
              :month, :year, :period_text,
              :room_fee, :electric_fee, :water_fee, :service_fee,
              :service_details, :adjustment, :adjustment_note,
@@ -19,4 +19,3 @@ class MonthlyInvoiceSerializer < ActiveModel::Serializer
     object.paid_at&.strftime("%Y-%m-%d %H:%M:%S")
   end
 end
-

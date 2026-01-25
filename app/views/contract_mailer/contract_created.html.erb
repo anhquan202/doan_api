@@ -47,11 +47,11 @@
         </tr>
         <tr>
           <td>Tiền đặt cọc:</td>
-          <td><%= number_to_currency(@contract.deposit, unit: "đ", format: "%n %u", delimiter: ".") %></td>
+          <td><%= number_with_delimiter(@contract.deposit, delimiter: ".") %> đ</td>
         </tr>
         <tr>
           <td>Giá phòng:</td>
-          <td><%= number_to_currency(@room&.price, unit: "đ", format: "%n %u", delimiter: ".") %>/tháng</td>
+          <td><%= number_with_delimiter(@room&.price, delimiter: ".") %> đ/tháng</td>
         </tr>
       </table>
       
