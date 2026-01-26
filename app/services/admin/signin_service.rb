@@ -13,7 +13,10 @@ class Admin::SigninService
 
       token = Warden::JWTAuth::UserEncoder.new.call(admin, :admin, nil).first
 
-      token
+      {
+        token: token,
+        admin: admin
+      }
     end
   end
 end

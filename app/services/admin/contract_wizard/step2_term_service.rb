@@ -27,6 +27,8 @@ class Admin::ContractWizard::Step2TermService
 
   def find_draft
     ContractDraft.active.find(@draft_id)
+  rescue
+    raise ArgumentError, "Phải hoàn thành các bước trước đó"
   end
 
   def validate_step1_complete!(draft)

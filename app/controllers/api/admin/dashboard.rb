@@ -23,7 +23,7 @@ class Api::Admin::Dashboard < Grape::API
       }
 
       # Contracts Statistics
-      new_contracts = ::Contract.order(created_at: :desc).limit(5)
+      new_contracts = ::Contract.where(created_at: Time.current.beginning_of_month..Time.current.end_of_month).order(created_at: :desc).limit(5)
       almost_expired_contracts = ::Contract.almost_expired
       warning_contracts = ::Contract.warning_contracts
 

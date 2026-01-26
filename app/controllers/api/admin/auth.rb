@@ -27,7 +27,7 @@ module Api
         end
         post "sign_in" do
           result = ::Admin::SigninService.new(params).call
-          ok_response(data: { token: result })
+          ok_response(data: result)
         end
       end
     end
