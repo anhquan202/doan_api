@@ -15,6 +15,12 @@ class Admin::ContractWizard::Step3CompleteService
       # Create customers, vehicles, and contract_customers
       create_customers_and_vehicles(draft, contract)
 
+      # Create contract supplies from draft
+      create_contract_supplies(draft, contract)
+
+      # Create contract utilities from draft
+      create_contract_utilities(draft, contract)
+
       # Update room status
       update_room_status(draft)
 
@@ -92,6 +98,49 @@ class Admin::ContractWizard::Step3CompleteService
   def update_room_status(draft)
     room = Room.find(draft.room_id)
     room.update!(status: :occupied)
+  end
+
+  def create_contract_supplies(draft, contract)
+    return if draft.supplies_data.blank?
+
+    draft.supplies_data.each do |supply_id, supply_info|
+      supply_info = supply_info.with_indifferent_access
+      supply = Supply.find_by(id: supply_info[:supply_id])
+
+      next unless supply
+
+      ContractSupply.create!(
+        contract_id: contract.id,
+        supply_id: supply_info[:supply_id],
+        quantity: supply_info[:quantity] || 1,
+        start_date: contract.start_date,
+        status: 1
+      )
+    end
+  rescue => e
+    Rails.logger.error "[Step3CompleteService] Failed to create contract supplies: #{e.message}"
+    raise e
+  end
+
+  def create_contract_utilities(draft, contract)
+    return if draft.utilities_data.blank?
+
+    draft.utilities_data.each do |utility_id, utility_info|
+      utility_info = utility_info.with_indifferent_access
+      utility = Utility.find_by(id: utility_info[:utility_id])
+
+      next unless utility
+
+      ContractUtility.create!(
+        contract_id: contract.id,
+        utility_id: utility_info[:utility_id],
+        start_date: contract.start_date,
+        status: :active
+      )
+    end
+  rescue => e
+    Rails.logger.error "[Step3CompleteService] Failed to create contract utilities: #{e.message}"
+    raise e
   end
 
   def send_contract_created_email(contract)

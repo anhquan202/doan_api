@@ -2,10 +2,12 @@ class Contract < ApplicationRecord
   belongs_to :room
   has_many :contract_utilities, dependent: :destroy
   has_many :contract_customers, dependent: :destroy
+  has_many :contract_supplies, dependent: :destroy
   # has_many :meter_readings, dependent: :destroy
 
   has_many :utilities, through: :contract_utilities, dependent: :destroy
   has_many :customers, through: :contract_customers, dependent: :destroy
+  has_many :supplies, through: :contract_supplies, dependent: :destroy
 
   validates :start_date, :end_date, presence: true
   validates :deposit, numericality: { greater_than_or_equal_to: 0 }

@@ -114,7 +114,7 @@ class Api::Admin::Room < Grape::API
       page = params[:page] || 1
       per_page = params[:per_page] || 10
 
-      rooms = Room.available.includes(:supplies, room_utilities: :utility, room_supplies: :supply).paginate(page: page, per_page: per_page)
+      rooms = Room.available.includes(:supplies, :utilities).paginate(page: page, per_page: per_page)
 
       data = {
         rooms: ActiveModel::SerializableResource.new(

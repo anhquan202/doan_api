@@ -4,14 +4,19 @@ class ContractDraft < ApplicationRecord
   enum :status, pending: 0, completed: 1, expired: 2, cancelled: 3
 
   validates :room_id, presence: true
-  validates :current_step, inclusion: { in: 1..3 }
+  validates :current_step, inclusion: { in: 0..3 }
 
   before_create :set_expiration
+  after_initialize :initialize_json_defaults
 
   scope :active, -> { where(status: :pending).where("expires_at > ?", Time.current) }
   scope :expired, -> { where("expires_at <= ?", Time.current).where(status: :pending) }
 
-  # Step validations
+  # Step validations - Step 0: Room initialization
+  def step0_complete?
+    supplies_data.present? || utilities_data.present?
+  end
+
   def step1_complete?
     customers_data.present? && customers_data.any?
   end
@@ -41,5 +46,10 @@ class ContractDraft < ApplicationRecord
     # Draft expires after 24 hours if not completed
     self.expires_at ||= 24.hours.from_now
   end
-end
 
+  def initialize_json_defaults
+    self.supplies_data ||= {}
+    self.utilities_data ||= {}
+    self.customers_data ||= []
+  end
+end

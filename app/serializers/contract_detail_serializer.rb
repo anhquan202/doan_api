@@ -7,15 +7,11 @@ class ContractDetailSerializer < ActiveModel::Serializer
     {
       id: object.room.id,
       name: object.room_name,
-      supplies: object.room.supplies,
-      utilities: serialized_utilities
+      supplies: object.supplies,
+      utilities: ActiveModelSerializers::SerializableResource.new(
+        object.utilities,
+        each_serializer: UtilitySerializer
+      )
     }
-  end
-
-  private
-  def serialized_utilities
-    object.utilities.map do |u|
-      UtilitySerializer.new(u, scope: scope, root: false).as_json
-    end
   end
 end

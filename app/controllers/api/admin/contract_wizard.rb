@@ -3,6 +3,36 @@ module Api
     class ContractWizard < Grape::API
       resources :contract_wizard do
         # ============================================
+        # Step 0: Initialize room with supplies and utilities
+        # ============================================
+        desc "Step 0: Initialize contract draft with room, supplies, and utilities"
+        params do
+          requires :room_id, type: Integer, desc: "Room ID for the contract"
+          optional :supplies, type: Array do
+            requires :supply_id, type: Integer, desc: "Supply ID"
+            optional :quantity, type: Integer, desc: "Quantity of supply", default: 1
+          end
+          optional :utilities, type: Array do
+            requires :utility_id, type: Integer, desc: "Utility ID"
+          end
+        end
+        post "init_room" do
+          draft = ::Admin::ContractWizard::InitRoomService.new(params).call
+
+          ok_response(
+            data: {
+              draft_id: draft.id,
+              current_step: draft.current_step,
+              room_id: draft.room_id,
+              supplies_count: draft.supplies_data.size,
+              utilities_count: draft.utilities_data.size,
+              expires_at: draft.expires_at
+            },
+            message: "Room initialized: Supplies and utilities saved"
+          )
+        end
+
+        # ============================================
         # Step 1: Create customers with vehicles
         # ============================================
         desc "Step 1: Initialize draft and add customers with vehicles"

@@ -1,7 +1,6 @@
 class Admin::ImportMeterReadingXlsxService
-  def initialize(file, generate_invoices: true)
+  def initialize(file)
     @file = file
-    @generate_invoices = generate_invoices
   end
 
   def call
@@ -73,12 +72,10 @@ class Admin::ImportMeterReadingXlsxService
 
     # Tự động tạo hóa đơn nếu được yêu cầu
     invoice_result = nil
-    if @generate_invoices
-      invoice_result = Admin::GenerateBulkMonthlyInvoicesService.new(
-        month: month,
-        year: year
-      ).call
-    end
+    invoice_result = Admin::GenerateBulkMonthlyInvoicesService.new(
+      month: month,
+      year: year
+    ).call
 
     {
       month: month,

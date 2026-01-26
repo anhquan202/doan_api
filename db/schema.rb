@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_02_000003) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_29_141214) do
   create_table "admins", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -55,9 +55,26 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_02_000003) do
     t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "supplies_data"
+    t.json "utilities_data"
     t.index ["expires_at"], name: "index_contract_drafts_on_expires_at"
     t.index ["room_id"], name: "index_contract_drafts_on_room_id"
     t.index ["status"], name: "index_contract_drafts_on_status"
+  end
+
+  create_table "contract_supplies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "contract_id", null: false
+    t.bigint "supply_id", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.decimal "price", precision: 12, scale: 2
+    t.integer "quantity", default: 1
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status", default: 1
+    t.index ["contract_id", "supply_id", "start_date"], name: "idx_contract_supply_period", unique: true
+    t.index ["contract_id"], name: "index_contract_supplies_on_contract_id"
+    t.index ["supply_id"], name: "index_contract_supplies_on_supply_id"
   end
 
   create_table "contract_utilities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -67,6 +84,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_02_000003) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.decimal "price", precision: 10
     t.index ["contract_id"], name: "index_contract_utilities_on_contract_id"
     t.index ["utility_id"], name: "index_contract_utilities_on_utility_id"
   end
@@ -207,6 +227,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_02_000003) do
   add_foreign_key "contract_customers", "contracts"
   add_foreign_key "contract_customers", "customers"
   add_foreign_key "contract_drafts", "rooms"
+  add_foreign_key "contract_supplies", "contracts"
+  add_foreign_key "contract_supplies", "supplies"
   add_foreign_key "contracts", "rooms"
   add_foreign_key "electric_readings", "contracts"
   add_foreign_key "monthly_invoices", "contracts"
